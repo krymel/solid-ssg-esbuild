@@ -1,0 +1,30 @@
+{
+  "compilerOptions": {
+    "strict": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "declaration": true,
+    "skipLibCheck": true,
+    "jsx": "preserve",
+    "jsxImportSource": "solid-js",
+    "resolveJsonModule": true,
+    "module": "ESNext",
+    "outDir": "./dist",
+    "emitDeclarationOnly": true,
+    "target": "ESNext",
+    "baseUrl": ".",
+    "typeRoots": [
+      "./src"
+    ],
+    "types": [
+      "node"
+    ]
+  },
+  "include": [
+    "src",
+    "lib"
+  ],
+  "ts-node": {
+    "swc": true
+  }
+}
