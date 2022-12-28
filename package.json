@@ -1,8 +1,8 @@
 {
-  "name": "solid-ssrissues",
+  "name": "solid-ssg-esbuild",
   "version": "0.0.1",
   "type": "module",
-  "description": "Issues with Solid SSR",
+  "description": "Simple example project for building pages via SSG only - using just Solid and esbuild",
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "yarn clean",
