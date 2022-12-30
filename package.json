@@ -6,9 +6,9 @@
   "scripts": {
     "clean": "rm -rf dist",
     "prebuild": "yarn clean",
-    "build": "NODE_OPTIONS='--enable-source-maps --experimental-vm-modules' ts-node --esm --experimental-specifier-resolution=node ./scripts/build.ts",
+    "build": "NODE_OPTIONS='--enable-source-maps --experimental-vm-modules --experimental-import-meta-resolve --no-warnings' ts-node --esm --experimental-specifier-resolution=node ./scripts/build.ts",
     "prestart": "yarn build",
-    "start": "NODE_OPTIONS='--enable-source-maps --experimental-vm-modules' ts-node --esm --experimental-specifier-resolution=node ./scripts/start.ts"
+    "start": "NODE_OPTIONS='--enable-source-maps --experimental-vm-modules --experimental-import-meta-resolve --no-warnings' ts-node --esm --experimental-specifier-resolution=node ./scripts/start.ts"
   },
   "license": "MIT",
   "dependencies": {

@@ -1,4 +1,5 @@
 import { createSignal } from "solid-js";
+import { HydrationScript } from "solid-js/web";
 import { renderPage } from "../lib/runtime"
 
 const Index = () => {
@@ -10,14 +11,21 @@ const Index = () => {
   }
 
   return (
-    <>
-      <div>index page</div>
-      <button onClick={handleMouseClick}>Click me</button>
-      <div>Clicked: {clickCount()}</div>
-      <script>
-        console.log('test1 index')
-      </script>
-    </>
+    <html>
+      <head>
+        <title>Index title</title>
+        <HydrationScript />
+      </head>
+      <body>
+        <div>index page</div>
+        <button onClick={handleMouseClick}>Click me</button>
+        <div>Clicked: {clickCount()}</div>
+        <script>
+          console.log('test1 index')
+        </script>
+      </body>
+      <script src={context.pageClientScriptPath}></script>
+    </html>
   )
 }
 export default renderPage(Index)
