@@ -27,10 +27,15 @@ await build({
   ]
 })
 
+const context = { pageClientScriptPath: 'index-client.js' }
+
 // client code bundle
 await build({
   bundle: true,
   format: 'iife',
+  define: {
+    context: JSON.stringify(context)
+  },
   platform: 'browser',
   //minify: true,
   sourcemap: 'external',
@@ -39,14 +44,14 @@ await build({
   plugins: [
     solidPlugin({ generate: 'dom', hydratable: true }),
     // de-duping the solid dependency triggers 
-    dedupeResolvePlugin({ isServer: false })
+    //dedupeResolvePlugin({ isServer: false })
   ]
 })
 
 const pageJs = await readFile('./dist/index.js', { encoding: 'utf-8' })
 
 // run page code
-const pageResult = await run<{ default: Function }, undefined>(pageJs, { pageClientScriptPath: 'index-client.js' })
+const pageResult = await run<{ default: Function }, undefined>(pageJs, context)
 const Page = pageResult.data!.default as () => unknown
 
 // SSG render and write to disk
