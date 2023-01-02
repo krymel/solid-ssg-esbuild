@@ -1,6 +1,6 @@
 import { createSignal } from "solid-js";
 import { HydrationScript } from "solid-js/web";
-import { renderPage } from "../lib/runtime"
+import { renderPage, pageClientScriptPath } from "../lib/runtime"
 
 const Index = () => {
   const [clickCount, setClickCount] = createSignal(0);
@@ -23,7 +23,7 @@ const Index = () => {
         <script>
           console.log('test1 index')
         </script>
-        <script src={context.pageClientScriptPath}></script>
+        <script src={pageClientScriptPath}></script>
       </body>
     </html>
   )
