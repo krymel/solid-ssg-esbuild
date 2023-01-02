@@ -43,6 +43,7 @@ await build({
   outfile: 'dist/index-client.js',
   plugins: [
     solidPlugin({ generate: 'dom', hydratable: true }),
+    // creates dist/compressed/index-client.js.gz (for analytics only)
     compress({
       brotli: false,
       outputDir: 'compressed',
