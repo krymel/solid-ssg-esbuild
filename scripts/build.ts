@@ -2,15 +2,14 @@ import { build, BuildOptions } from "esbuild"
 import { run } from "../lib/vm"
 import { readFile, writeFile } from "fs/promises"
 import { renderToString } from "solid-js/web"
-import { dedupeResolvePlugin, solidPlugin } from "../lib/plugin"
-import { deflateRaw } from "zlib"
+import { solidPlugin } from "../lib/plugin"
+import { compress } from 'esbuild-plugin-compress';
 
 console.time('Building page')
 
 // defaults for server code bundles
 export const esbuildConfigBaseSsr: BuildOptions = {
   bundle: true,
-  //minify: true,
   outdir: 'dist',
   format: 'esm',
   platform: 'node',
@@ -36,15 +35,19 @@ await build({
   define: {
     context: JSON.stringify(context)
   },
+  minify: true,
+  write: false,
   platform: 'browser',
-  //minify: true,
   sourcemap: 'external',
   entryPoints: ['src/index.tsx'],
   outfile: 'dist/index-client.js',
   plugins: [
     solidPlugin({ generate: 'dom', hydratable: true }),
-    // de-duping the solid dependency triggers 
-    //dedupeResolvePlugin({ isServer: false })
+    compress({
+      brotli: false,
+      outputDir: 'compressed',
+      exclude: ['**/*.map'],
+    }),
   ]
 })
 
@@ -57,11 +60,12 @@ const Page = pageResult.data!.default as () => unknown
 // SSG render and write to disk
 await writeFile('dist/index.html', renderToString(Page), { encoding: 'utf-8' })
 
-const pageClientJs = await readFile('dist/index-client.js', { encoding: 'utf-8' })
-
 console.timeEnd('Building page')
 
-deflateRaw(Buffer.from(pageClientJs), (err, compressedJs) => {
-  console.log('Page JS in KiB', Math.round(Buffer.from(pageClientJs).byteLength / 1024))
-  console.log('Page JS in KiB (deflate)', Math.round(compressedJs.byteLength / 1024))
-})
+const pageClientJs = Buffer.from(await readFile('dist/index-client.js'))
+const pageClientJsGz = Buffer.from(await readFile('dist/compressed/index-client.js.gz'))
+
+const sizeInKib = (buffer: Buffer) => (buffer.byteLength / 1024).toFixed(2)
+
+console.log('index-client.js:', sizeInKib(pageClientJs), 'KiB')
+console.log('index-client.js (gz):', sizeInKib(pageClientJsGz), 'KiB')

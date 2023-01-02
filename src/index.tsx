@@ -23,8 +23,8 @@ const Index = () => {
         <script>
           console.log('test1 index')
         </script>
+        <script src={context.pageClientScriptPath}></script>
       </body>
-      <script src={context.pageClientScriptPath}></script>
     </html>
   )
 }
